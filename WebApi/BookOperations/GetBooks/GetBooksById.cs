@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AutoMapper;
 using WebApi.common;
 using WebApi.DBOperations;
 
@@ -8,10 +9,12 @@ namespace WebApi.BookOperations.GetBooks
     public class GetBooksById
     {
         private readonly BookStoreDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public GetBooksById(BookStoreDbContext dbContext)
+        public GetBooksById(BookStoreDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public GetByIdModel Handle(int id)
@@ -20,11 +23,11 @@ namespace WebApi.BookOperations.GetBooks
             if (book is null)
                 throw new InvalidOperationException("Böyle bir kitap yok !");
 
-            GetByIdModel model = new GetByIdModel();
-            model.Title = book.Title;
-            model.Genre = ((GenreEnum)book.GenreId).ToString();
-            model.PageCount = book.PageCount;
-            model.PublishDate = book.PublishDate;
+            GetByIdModel model = _mapper.Map<GetByIdModel>(book);  //new GetByIdModel();
+            // model.Title = book.Title;
+            // model.Genre = ((GenreEnum)book.GenreId).ToString();
+            // model.PageCount = book.PageCount;
+            // model.PublishDate = book.PublishDate;
 
             return model;
 

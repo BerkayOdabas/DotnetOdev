@@ -1,0 +1,18 @@
+using AutoMapper;
+using WebApi.BookOperations.GetBooks;
+using static WebApi.BookOperations.CreateBooks.CreateBookCommand;
+using static WebApi.BookOperations.GetBooks.GetBooksQuery;
+
+namespace WebApi.common
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            CreateMap<CreateBookModel, Book>();
+            CreateMap<Book, GetByIdModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => ((GenreEnum)src.GenreId).ToString()));
+            CreateMap<Book, BooksViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => ((GenreEnum)src.GenreId).ToString()));
+        }
+    }
+
+}
