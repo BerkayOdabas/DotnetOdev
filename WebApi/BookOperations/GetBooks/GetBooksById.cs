@@ -10,6 +10,8 @@ namespace WebApi.BookOperations.GetBooks
     {
         private readonly BookStoreDbContext _dbContext;
         private readonly IMapper _mapper;
+        public GetByIdModel Model { get; set; }
+        public int Id { get; set; }
 
         public GetBooksById(BookStoreDbContext dbContext, IMapper mapper)
         {
@@ -17,17 +19,13 @@ namespace WebApi.BookOperations.GetBooks
             _mapper = mapper;
         }
 
-        public GetByIdModel Handle(int id)
+        public GetByIdModel Handle()
         {
-            var book = _dbContext.Books.SingleOrDefault(book => book.Id == id);
+            var book = _dbContext.Books.SingleOrDefault(book => book.Id == Id);
             if (book is null)
                 throw new InvalidOperationException("Böyle bir kitap yok !");
 
-            GetByIdModel model = _mapper.Map<GetByIdModel>(book);  //new GetByIdModel();
-            // model.Title = book.Title;
-            // model.Genre = ((GenreEnum)book.GenreId).ToString();
-            // model.PageCount = book.PageCount;
-            // model.PublishDate = book.PublishDate;
+            GetByIdModel model = _mapper.Map<GetByIdModel>(book);
 
             return model;
 

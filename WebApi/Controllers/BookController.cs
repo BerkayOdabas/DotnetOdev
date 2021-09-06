@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.BookOperations.CreateBooks;
 using WebApi.BookOperations.DeleteBook;
@@ -45,7 +47,11 @@ namespace WebApi.AddControllers
 
             try
             {
-                var result = query.Handle(id);
+                query.Id = id;
+                GetBooksCommandValidator validator = new GetBooksCommandValidator();
+                validator.ValidateAndThrow(query);
+                var result = query.Handle();
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -70,6 +76,9 @@ namespace WebApi.AddControllers
             try
             {
                 command.Model = newBook;
+                CreateBookCommandValidator validator = new CreateBookCommandValidator();
+                validator.ValidateAndThrow(command);
+
                 command.Handle();
 
             }
@@ -90,6 +99,8 @@ namespace WebApi.AddControllers
             try
             {
                 bookQuery.Model = updatedBook;
+                UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
+                validator.ValidateAndThrow(bookQuery);
                 bookQuery.Handle(id);
             }
             catch (Exception ex)
@@ -110,6 +121,8 @@ namespace WebApi.AddControllers
             {
                 DeleteBookCommand command = new DeleteBookCommand(_context);
                 command.BookId = id;
+                DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
             }
             catch (Exception ex)
