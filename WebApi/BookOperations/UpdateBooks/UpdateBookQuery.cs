@@ -7,6 +7,7 @@ namespace WebApi.BookOperations.UpdateBooks
 {
     public class UpdateBookQuery
     {
+        public int Id { get; set; }
         public UpdateBookModel Model { get; set; }
         private readonly BookStoreDbContext _dbContext;
         public UpdateBookQuery(BookStoreDbContext dbContext)
@@ -14,9 +15,9 @@ namespace WebApi.BookOperations.UpdateBooks
             _dbContext = dbContext;
         }
 
-        public void Handle(int id)
+        public void Handle()
         {
-            var book = _dbContext.Books.SingleOrDefault(x => x.Id == id);
+            var book = _dbContext.Books.SingleOrDefault(x => x.Id == Id);
             if (book is null)
                 throw new InvalidOperationException("Böyle bir kitap yok !");
 

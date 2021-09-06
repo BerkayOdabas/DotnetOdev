@@ -99,9 +99,10 @@ namespace WebApi.AddControllers
             try
             {
                 bookQuery.Model = updatedBook;
+                bookQuery.Id = id;
                 UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
                 validator.ValidateAndThrow(bookQuery);
-                bookQuery.Handle(id);
+                bookQuery.Handle();
             }
             catch (Exception ex)
             {
